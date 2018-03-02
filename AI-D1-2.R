@@ -100,22 +100,20 @@ for(i in 1:m){
 plot(sample.size, xbar, xlab="Number of observations, n", ylab="sample mean", main="Law of Large Numbers", type="l", col="red", lwd=1.5)
 abline(h=0.5, col="blue")
 
-
 # 30/41
-z <- (126/210 -0.7)/sqrt(0.001) # ³q¹L¤H¼Æ>126ªº¾÷²v
+z <- (126/210 -0.7)/sqrt(0.001) # é€šéŽäººæ•¸>126çš„æ©ŸçŽ‡
 z
 1 - pnorm(z)
 
-pass.prob <- function(x, n, mu, sigma2, digit=m){
+pass.prob <- function(x, n, mu, sigma2, digit=m) {
     xbar <- x/n
     z <- (xbar-mu)/sqrt(sigma2)
     zvalue <- round(z, digit)
     right.prob <- round(1-pnorm(z), digit)
     list(zvalue=zvalue, prob=right.prob)
-  }
+}
 
 pass.prob(126, 210, 0.7, 0.001, 4)
-
 
 # 32/41
 umin <- 5
@@ -126,10 +124,9 @@ n.repeated <- 500
 RandomSample <- matrix(0, n.sample, n.repeated)
 for(i in 1:n.repeated){
    rnumber <- runif(n.sample, umin, umax)
-   RandomSample[,i] <- as.matrix(rnumber) 
+   RandomSample[,i] <- as.matrix(rnumber)
 }
 dim(RandomSample)
-
 
 # 33/41
 par(mfrow=c(2,2))
@@ -138,7 +135,6 @@ for(i in 1:4){
   hist(RandomSample[,i], ylab="f(x)", xlab="random uniform", pro=T, main=title)
 }
 
-
 # 34/41
 SampleMean <- apply(RandomSample, 2, mean)
 hist(SampleMean, ylab="f(x)", xlab="sample mean", pro=T, main="n=20")
@@ -146,9 +142,8 @@ hist(SampleMean, ylab="f(x)", xlab="sample mean", pro=T, main="n=20")
 qqnorm(SampleMean)
 qqline(SampleMean)
 
-
 # 35/41
-CLT.unif <- function(umin, umax, n.sample, n.repeated){ 
+CLT.unif <- function(umin, umax, n.sample, n.repeated) { 
   RandomSample <- matrix(0, n.sample, n.repeated)
   for(i in 1:n.repeated){
     rnumber <- runif(n.sample, umin, umax)
@@ -161,7 +156,13 @@ CLT.unif <- function(umin, umax, n.sample, n.repeated){
   qqnorm(SampleMean)
   qqline(SampleMean)
 }
+CLT.unif(5, 80, 50, 500)
 
+# 36/41
+CLT.unif(5, 80, 1, 500)
+CLT.unif(5, 80, 5, 500)
+CLT.unif(5, 80, 10, 500)
+CLT.unif(5, 80, 30, 500)
 
 # 37/41
 sample(1:49, 6, replace = FALSE)
@@ -175,16 +176,13 @@ set.seed(12345)
 sample(1:49, 6, replace = FALSE)
 sample(1:49, 6, replace = FALSE)
 
-
 # 39/41
 1 / choose(49, 6)
 choose(6, 5) / choose(49, 6)
 (choose(6, 5)*choose(49-6-1, 1)) / choose(49, 6) 
 
-
 # 41/41
-girl.born <- function(n, show.id = F){
-  
+girl.born <- function(n, show.id = F) {
   girl.count <- 0
   for (i in 1:n) {
     if (show.id) cat(i,": ")
@@ -196,25 +194,22 @@ girl.born <- function(n, show.id = F){
       child.count <- child.count + 1
       if (is.girl){
         girl.count <- girl.count + 1
-        if (show.id) cat("¤k+")
+        if (show.id) cat("å¥³+")
         break
       } else if (child.count == 3) {
-        if (show.id) cat("¨k")        
+        if (show.id) cat("ç”·")        
         break
       } else{
-        if (show.id) cat("¨k")        
+        if (show.id) cat("ç”·")        
       }
     }
     if (show.id) cat("\n")
   }
   p <- girl.count / n
   p
-  
 }
 
 girl.p <- 0.49 + 0.51*0.49 + 0.51^2*0.49
 girl.p
 girl.born(n=10, show.id = T)
 girl.born(n=10000)
-
-
