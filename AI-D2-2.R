@@ -4,11 +4,13 @@ myvector
 mycountry <- c("Austria", "Australia", NA, NA, "Germany", "NA")
 mycountry
 is.na(myvector)
+is.na(mycountry)
 which(is.na(myvector))
+which(is.na(mycountry))
 x <- c(1, 4, 7, 10)
-x[4] <- NA # sets the 4th element to NA
+x[4] <- NA # assign the 4th element to NA
 x
-is.na(x) <- 1 # sets the first element to NA
+is.na(x) <- 1 # assign the first element to NA
 x
 
 mydata$v1[mydata$v1==99] <- NA 
@@ -19,7 +21,6 @@ mydata[sample(1:20, 3)] <- NA
 mydata 
 which(colSums(is.na(mydata))>0)
 
-
 # 14/46
 x <- c(1, 4, NA, 10)
 summary(x)
@@ -29,7 +30,6 @@ mean(x, na.rm=TRUE)
 sd(x, na.rm=TRUE)
 x[!is.na(x)]
 
-
 # 16/46
 mydata <- as.data.frame(matrix(sample(1:20, 8), ncol = 2))
 mydata[4, 2] <- NA
@@ -38,7 +38,6 @@ mydata
 lm(y~x, data = mydata)
 lm(y~x, data = mydata, na.action = na.omit)
 lm(y~x, data = mydata, na.action = na.fail)
-
 
 # 17/46
 x <- c(1, 0, 10)
@@ -51,38 +50,34 @@ is.finite(1/x)
 is.infinite(-10/x)
 
 exp(-Inf)
-0/Inf
-Inf - Inf
-Inf/Inf
-
+0 / Inf     # 0
+Inf - Inf   # NaN
+Inf / Inf   # NaN
+Inf * Inf   # Inf
 
 # 20/46
 head(airquality)
 dim(airquality)
+mydata <- airquality
 mydata[4:10,3] <- rep(NA,7)
 mydata[1:5,4] <- NA
 summary(mydata)
-
 
 # 21/46
 library(mice)
 md.pattern(mydata)
 
 library(VIM)
-mydata.aggrplot <- aggr(mydata, col=c('lightblue','red'), numbers=TRUE, prop = TRUE, sortVars=TRUE, labels=names(mydata), cex.axis=.7, gap=3)
-
+mydata.aggrplot <- aggr(mydata, col=c('lightblue','red'), numbers=TRUE, prop = TRUE, sortVars=TRUE, labels=names(mydata), cex.axis=.7, gap=3)
 
 # 22/46
 matrixplot(mydata)
 
-
 # 23/46
 md.pairs(mydata)
 
-
 # 24/46
-marginplot(mydata[,c("Ozone", "Solar.R")], col = c("blue", "red"))
-
+marginplot(airquality[,c("Ozone", "Solar.R")], col = c("blue", "red"))
 
 # 26/46
 mdata <- matrix(rnorm(15), nrow=5)
@@ -93,7 +88,6 @@ mdata
 (x2 <- mdata[complete.cases(mdata),])
 mdata[!complete.cases(mdata),]
 
-
 #27/46
 cov(mdata)
 cov(mdata, use = "all.obs")
@@ -101,7 +95,6 @@ cov(mdata, use = "complete.obs")
 
 cov(mdata, use = "na.or.complete")
 cov(mdata, use = "pairwise")
-
 
 #28/46
 mean.subst <- function(x) {
@@ -113,42 +106,34 @@ mdata
 mdata.mip <- apply(mdata, 2, mean.subst)
 mdata.mip
 
-
 # 31/46
 names(airquality)
 airquality.imp.median <- kNN(airquality[1:4], k=5)
 head(airquality.imp.median)
 
-
 # 32/46
 matrixplot(airquality[1:4], interactive = F, main="airquality")
 matrixplot(airquality.imp.median[1:4], interactive = F, main="imputed by median")
 
-trim_mean <- function(x){
+trim_mean <- function(x) {
    mean(x, trim = 0.1)
 }
 
-airquality.imp.mean <- kNN(airquality[1:4], 
-k=5, metric=dist, numFun=mean)
-airquality.imp.tmean <- kNN(airquality[1:4], 
-k=5, numFun=trim_mean)
-
+airquality.imp.mean <- kNN(airquality[1:4], k=5, metric=dist, numFun=mean)
+airquality.imp.tmean <- kNN(airquality[1:4], k=5, numFun=trim_mean)
 
 # 34/46
 airquality.imp.lm <- regressionImp(Ozone ~ Wind + Temp, data=airquality)
 data(sleep)
 summary(sleep)
 
-
 # 35/46
 sleep.imp.lm <- regressionImp(Dream + NonD ~ BodyWgt + BrainWgt, data=sleep)
 summary(sleep.imp.lm)
 
-
 # 39/46
 methods(mice)
 ? mice
-
 
 # 40/46
 mydata.ip <- mice(mydata, m=5, maxit=50, meth='pmm', seed=500)
@@ -158,19 +143,15 @@ mydata.ip$imp$Ozone
 
 mydata.completed <- complete(mydata.ip, 1)
 
-
 # 41/46
 library(lattice)
 xyplot(mydata.ip, Ozone ~ Wind + Temp + Solar.R, pch=16, cex=0.5)
 
-
 # 42/46
 densityplot(mydata.ip)
 
-
 # 43/46
 stripplot(mydata.ip, pch = 16, cex = 0.6)
-
 
 # 44/46
 modelFit1 <- with(mydata.ip, lm(Temp~ Ozone + Solar.R+Wind))
@@ -180,8 +161,8 @@ mydata.ip2 <- mice(mydata, m=50, seed=245435)
 modelFit2 <- with(mydata.ip2,lm(Temp ~ Ozone + Solar.R + Wind))
 summary(pool(modelFit2))
 
-
 # 45/46
+library(missForest)
 iris.mis <- prodNA(iris, noNA = 0.1)  
 summary(iris.mis)
 iris.mis <- subset(iris.mis, select = -c(Species))
@@ -198,4 +179,4 @@ imputed.Data$imp$Sepal.Width
 completeData <- complete(imputed.Data,2)
 fit <- with(data = imputed.Data, exp = lm(Sepal.Width ~ Sepal.Length + Petal.Width)) 
 combine <- pool(fit)
-summary(combine
+summary(combine)
